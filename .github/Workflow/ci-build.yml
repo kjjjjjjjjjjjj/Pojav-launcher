@@ -1,0 +1,60 @@
+name: Android CI Build with Git Commands
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-merge:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up JDK 17 (or adjust to the version required by your project)
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # Step 3: Pull the latest changes from the main branch
+      - name: Pull latest changes from main
+        run: git pull origin main
+
+      # Step 4: Checkout to the main branch
+      - name: Checkout main branch
+        run: git checkout main
+
+      # Step 5: Merge the specified branch into main
+      - name: Merge kjjjjjjjjjjjj-patch-14 into main
+        run: git merge kjjjjjjjjjjjj-patch-14
+
+      # Step 6: Push the merged changes to the main branch
+      - name: Push changes to main
+        run: git push -u origin main
+
+      # Step 7: Cache Gradle dependencies
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Step 8: Build the APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # Step 9: Upload the APK as an artifact
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
