@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-merge:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,15 +29,7 @@ jobs:
       - name: Checkout main branch
         run: git checkout main
 
-      # Step 5: Merge the specified branch into main
-      - name: Merge kjjjjjjjjjjjj-patch-14 into main
-        run: git merge kjjjjjjjjjjjj-patch-14
-
-      # Step 6: Push the merged changes to the main branch
-      - name: Push changes to main
-        run: git push -u origin main
-
-      # Step 7: Cache Gradle dependencies
+      # Step 5: Cache Gradle dependencies
       - name: Cache Gradle dependencies
         uses: actions/cache@v3
         with:
@@ -48,13 +40,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Step 8: Build the APK
+      # Step 6: Build the APK - Adjust the task to target the correct module
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew :app:assembleDebug  # Change 'app' to your module name if different
 
-      # Step 9: Upload the APK as an artifact
+      # Step 7: Upload the APK as an artifact
       - name: Upload Debug APK
         uses: actions/upload-artifact@v3
         with:
           name: app-debug.apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: app/build/outputs/apk/debug/app-debug.apk  # Make sure the path matches your project structure
