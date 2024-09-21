@@ -66,3 +66,18 @@ jobs:
 
       - name: Finalize Build
         run: echo "Build process completed."
+        # Puri coding yahan tak
+      # ...
+
+      # Debug APK banane ke liye
+      - name: Build Debug APK
+        run: |
+          gradle :app_pojavlauncher:assembleDebug
+          mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
+
+      # Debug APK ko upload karne ke liye
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-debug
+          path: out/app-debug.apk
