@@ -1,8 +1,7 @@
 buildscript {
     repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" } // Additional repository
+        // Remove this line if it adds a repo
+        // maven { url "MavenRepo URL" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
@@ -11,8 +10,6 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        mavenCentral()
-        maven { url "https://jitpack.io" } // Same additional repository
+        // Remove all repository definitions here if they conflict
     }
 }
