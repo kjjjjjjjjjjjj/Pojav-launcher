@@ -12,6 +12,6 @@ buildscript {
 
 allprojects {
     repositories {
-        // No repositories defined here
+        // All project repositories are defined in settings.gradle, no need to redefine here
     }
 }
