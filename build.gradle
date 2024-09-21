@@ -2,8 +2,8 @@
 
 buildscript {
     repositories {
-        mavenCentral()
         google()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.4'
@@ -12,6 +12,8 @@ buildscript {
 
 allprojects {
     repositories {
-        // All project repositories are defined in settings.gradle, no need to redefine here
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
