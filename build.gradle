@@ -2,16 +2,28 @@
 
 buildscript {
     repositories {
-        google()
-        mavenCentral()
+        google()  // Google repository for Android dependencies
+        mavenCentral()  // Maven Central for additional dependencies
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.0.4'  // Android Gradle plugin
     }
 }
 
 allprojects {
     repositories {
-        // All project repositories are defined in settings.gradle, no need to redefine here
+        // No need to redefine repositories here since they are defined in settings.gradle
+    }
+}
+
+// Prevent deprecated Gradle features from being used
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation"
+}
+
+// Optional: Enable the use of a Java toolchain
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))  // Specify Java version (update as needed)
     }
 }
