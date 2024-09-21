@@ -25,17 +25,16 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '8'  # Change this if you need a different version
+          java-version: '8'  # Use the Java version your project requires
 
-      - name: Build APK
+      - name: Build Debug APK
         run: |
-          # Include the commands to build your APK here
-          echo "Building APK..."
-          # Replace the following line with the actual build command for your project
-          ./gradlew assembleDebug  # Example command, change according to your setup
+          echo "Starting the build process..."
+          # Include your build command here. If using Gradle, it might look like this:
+          ./gradlew assembleDebug  # Adjust according to your build system
 
-      - name: Upload APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v3
         with:
           name: app-debug
-          path: app/build/outputs/apk/debug/*.apk  # Adjust path if needed
+          path: app/build/outputs/apk/debug/*.apk  # Adjust this path if necessary
