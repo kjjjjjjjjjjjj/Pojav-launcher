@@ -66,3 +66,15 @@ jobs:
 
       - name: Finalize Build
         run: echo "Build process completed."
+# ... baaki steps yahan
+
+      - name: Build Release APK
+        run: |
+          gradle :app_pojavlauncher:assembleRelease
+          mv app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk out/app-release.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: out/app-release.apk
