@@ -1,0 +1,41 @@
+name: Android CI
+
+on:
+  pull_request:
+    branches-ignore:
+      - 'l10n_v3_openjdk2'
+    types: [opened, reopened]
+  push:
+    branches-ignore:
+      - 'l10n_v3_openjdk2'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
+      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'  # Change this if you need a different version
+
+      - name: Build APK
+        run: |
+          # Include the commands to build your APK here
+          echo "Building APK..."
+          # Replace the following line with the actual build command for your project
+          ./gradlew assembleDebug  # Example command, change according to your setup
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/*.apk  # Adjust path if needed
