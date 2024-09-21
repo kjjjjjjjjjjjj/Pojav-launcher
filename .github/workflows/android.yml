@@ -60,14 +60,16 @@ jobs:
         with:
           gradle-version: 7.6.1
 
+      - name: Make languagelist_updater.sh executable
+        run: chmod +x ./scripts/languagelist_updater.sh
+
       - name: Build JRE JAR files
         run: |
           ./scripts/languagelist_updater.sh
-
           mkdir out
           # Build JRE JAR files (security manager, etc...)
           gradle :jre_lwjgl3glfw:build --no-daemon
-
+          
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
@@ -79,13 +81,13 @@ jobs:
         run: |
           gradle :app_pojavlauncher:bundleGplay
           mv app_pojavlauncher/build/outputs/bundle/gplay/app_pojavlauncher-gplay.aab out/app-gplay.aab
-
+          
       - name: Build Debug .apk
         run: |
           # Build the launcher
           gradle :app_pojavlauncher:assembleDebug
           mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug.apk
-
+          
       - name: Build APK without runtime
         run: |
           rm -r app_pojavlauncher/src/main/assets/components/jre
@@ -93,11 +95,12 @@ jobs:
           rm -r app_pojavlauncher/src/main/assets/components/jre-21
           gradle assembleDebug
           mv app_pojavlauncher/build/outputs/apk/debug/app_pojavlauncher-debug.apk out/app-debug-noruntime.apk
+          
       - name: Gen md5sums
         run: |
           md5sum out/app-debug.apk > out/app-debug.md5
           md5sum out/app-debug-noruntime.apk > out/app-debug-noruntime.md5
-
+          
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
