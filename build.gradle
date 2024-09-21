@@ -1,15 +1,1 @@
-buildscript {
-    repositories {
-        // Remove this line if it adds a repo
-        // maven { url "MavenRepo URL" }
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
-    }
-}
 
-allprojects {
-    repositories {
-        // Remove all repository definitions here if they conflict
-    }
-}
