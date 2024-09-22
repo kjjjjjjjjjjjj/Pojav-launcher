@@ -16,17 +16,20 @@ jobs:
     env:
       GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-    
+
     steps:
+      # Checkout the code from the repository
       - name: Checkout
         uses: actions/checkout@v3
 
+      # Set up JDK 8 for building the project
       - name: Set up JDK 8
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '8'
 
+      # Download JRE 8
       - name: Get JRE 8
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -37,6 +40,7 @@ jobs:
           branch: buildjre8
           name: jre8-pojav
 
+      # Download JRE 17
       - name: Get JRE17
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -47,6 +51,7 @@ jobs:
           branch: buildjre17-21
           name: jre17-pojav
 
+      # Download JRE 21
       - name: Get JRE21
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -57,12 +62,36 @@ jobs:
           branch: buildjre17-21
           name: jre21-pojav
 
+      # Make the language updater executable
       - name: Make language updater executable
         run: chmod +x ./scripts/languagelist_updater.sh
 
+      # Run the language list updater
       - name: Run language list updater
         run: |
           ./scripts/languagelist_updater.sh || echo "Language list update failed, continuing..."
+
+      # Build Debug APK
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      # Build Release APK
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      # Upload Debug APK artifact
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: PojavLauncher-Debug-APK
+          path: app/build/outputs/apk/debug/*.apk
+
+      # Upload Release APK artifact
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: PojavLauncher-Release-APK
+          path: app/build/outputs/apk/release/*.apk
 
       - name: Finalize Build
         run: echo "Build process completed."
