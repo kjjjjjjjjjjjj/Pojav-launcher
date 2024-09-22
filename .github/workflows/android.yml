@@ -64,5 +64,27 @@ jobs:
         run: |
           ./scripts/languagelist_updater.sh || echo "Language list update failed, continuing..."
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Build Release APK
+        run: |
+          # Build the release APK
+          ./gradlew assembleRelease
+          mkdir -p out
+          mv app_pojavlauncher/build/outputs/apk/release/app_pojavlauncher-release.apk out/
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: out/app_pojavlauncher-release.apk
+
       - name: Finalize Build
-        run: echo "Build process completed."
+        run: echo "APK build process completed."
