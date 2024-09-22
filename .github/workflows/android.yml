@@ -1,4 +1,4 @@
-name: Android CI
+name: Android CI - Debug APK Build
 
 on:
   pull_request:
@@ -27,6 +27,10 @@ jobs:
           distribution: 'temurin'
           java-version: '8'
 
+      - name: Make Gradlew Executable
+        run: chmod +x ./gradlew
+
+      # Optional steps to download JREs for Java versions 8, 17, and 21 as you were doing previously
       - name: Get JRE 8
         uses: dawidd6/action-download-artifact@v2
         with:
@@ -57,12 +61,12 @@ jobs:
           branch: buildjre17-21
           name: jre21-pojav
 
-      - name: Make language updater executable
-        run: chmod +x ./scripts/languagelist_updater.sh
+      # Build Debug APK
+      - name: Build the Debug APK
+        run: ./gradlew assembleDebug
 
-      - name: Run language list updater
-        run: |
-          ./scripts/languagelist_updater.sh || echo "Language list update failed, continuing..."
-
-      - name: Finalize Build
-        run: echo "Build process completed."
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
