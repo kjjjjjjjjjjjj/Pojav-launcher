@@ -1,39 +1,37 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android' // Kotlin use kar rahe hain to
-}
-
 android {
-    compileSdk 34
-
+    compileSdkVersion 33
     defaultConfig {
-        applicationId "com.yourproject.pojavlauncher"
-        minSdk 21
-        targetSdk 34
+        applicationId "com.example.yourapp"
+        minSdkVersion 21
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        debug {
+            // Debug-specific configuration
+            debuggable true
             minifyEnabled false
+        }
+        release {
+            // Release-specific configuration
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+        release {
+            keyAlias 'your-key-alias'
+            keyPassword 'your-key-password'
+            storeFile file('path/to/your/keystore.jks')
+            storePassword 'your-store-password'
         }
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.10.1'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-}
-
-// Custom task to assemble APK
-task buildApk(type: Exec) {
-    commandLine 'gradle', 'assembleRelease'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'com.google.android.material:material:1.4.0'
 }
