@@ -16,7 +16,8 @@ jobs:
     env:
       GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-    
+      GRADLE_USER_HOME: /home/runner/.gradle
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -27,35 +28,17 @@ jobs:
           distribution: 'temurin'
           java-version: '8'
 
-      - name: Get JRE 8
-        uses: dawidd6/action-download-artifact@v2
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/components/jre
-          workflow_conclusion: success
-          repo: PojavLauncherTeam/android-openjdk-build-multiarch
-          branch: buildjre8
-          name: jre8-pojav
+          gradle-version: 7.6.1
+          cache-read-only: false
 
-      - name: Get JRE17
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/components/jre-new
-          workflow_conclusion: success
-          repo: PojavLauncherTeam/android-openjdk-build-multiarch
-          branch: buildjre17-21
-          name: jre17-pojav
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
-      - name: Get JRE21
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          path: app_pojavlauncher/src/main/assets/components/jre-21
-          workflow_conclusion: success
-          repo: PojavLauncherTeam/android-openjdk-build-multiarch
-          branch: buildjre17-21
-          name: jre21-pojav
+      - name: List Gradle Tasks
+        run: ./gradlew tasks --all
 
       - name: Make language updater executable
         run: chmod +x ./scripts/languagelist_updater.sh
@@ -64,6 +47,6 @@ jobs:
         run: |
           ./scripts/languagelist_updater.sh || echo "Language list update failed, continuing..."
 
-      - name: Finalize Build
-        run: echo "Build process completed."
-        
+      - name: Build Debug APK
+        run: ./gradlew :app:assembleDebug --no-daemon
+        working-directory: app  # Replace 'app' with the correct module if necessary
