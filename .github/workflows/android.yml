@@ -16,7 +16,8 @@ jobs:
     env:
       GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
       CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
-    
+      GRADLE_USER_HOME: /home/runner/.gradle
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -26,6 +27,15 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '8'
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.6.1
+          cache-read-only: false
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
 
       - name: Get JRE 8
         uses: dawidd6/action-download-artifact@v2
@@ -64,6 +74,5 @@ jobs:
         run: |
           ./scripts/languagelist_updater.sh || echo "Language list update failed, continuing..."
 
-      - name: Finalize Build
-        run: echo "Build process completed."
-        
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --no-daemon
