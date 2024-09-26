@@ -14,12 +14,11 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     env:
-      GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
-      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
       GPLAY_KEYSTORE: ${{ secrets.GPLAY_KEYSTORE }}
       GPLAY_KEY_ALIAS: ${{ secrets.GPLAY_KEY_ALIAS }}
       GPLAY_KEYSTORE_PASSWORD: ${{ secrets.GPLAY_KEYSTORE_PASSWORD }}
       GPLAY_KEY_PASSWORD: ${{ secrets.GPLAY_KEY_PASSWORD }}
+      CURSEFORGE_API_KEY: ${{ secrets.CURSEFORGE_API_KEY }}
     
     steps:
       - name: Checkout
